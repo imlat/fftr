@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>aimama | Community</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">a</span> aimama</a>
+    <span class="network"><span class="status-dot"></span> community hub</span>
+  </header>
+  <main class="wrapper">
+    <section class="hero-copy" aria-labelledby="page-title">
+      <p class="eyebrow">A place to build together</p>
+      <h1 id="page-title">Your voice<br><em>shapes</em> aimama.</h1>
+      <p class="intro">Drop a thought, idea, or bit of feedback. No account, wallet, or verification needed.</p>
+      <div class="signal-row"><span>01</span><span class="signal-line"></span><span>open channel</span></div>
+    </section>
+    <section class="feedback-card" aria-labelledby="feedback-heading">
+      <div class="card-top"><span>FEEDBACK PORTAL</span><span class="card-icon">↗</span></div>
+      <div class="card-body">
+        <div class="avatar">✦</div>
+        <h2 id="feedback-heading">Tell us what you think</h2>
+        <p class="card-note">Your message will be sent directly to the aimama inbox.</p>
+        <form id="feedback-form" action="https://formsubmit.co/ajax/narutomaki702@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New aimama feedback">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <label for="feedback">Your message</label>
+          <textarea id="feedback" name="feedback" required placeholder="The next thing aimama should know is..." rows="5"></textarea>
+          <button class="button" type="submit"><span>Send feedback</span><span aria-hidden="true">→</span></button>
+          <p class="success-message" id="success-message" role="status" hidden>Thanks. Your feedback was emailed.</p>
+          <p class="error-message" id="error-message" role="alert" hidden>Could not send right now. Please try again.</p>
+        </form>
+      </div>
+      <div class="card-foot"><span>DIRECT DELIVERY</span><span>● READY</span></div>
+    </section>
+  </main>
+  <footer><span>© 2026 aimama</span><span>made for the community</span></footer>
+  <script>
+    const feedbackForm = document.querySelector('#feedback-form');
+    const feedbackInput = document.querySelector('#feedback');
+    const successMessage = document.querySelector('#success-message');
+    const errorMessage = document.querySelector('#error-message');
+    const submitButton = feedbackForm.querySelector('button');
+    feedbackForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      submitButton.disabled = true;
+      submitButton.querySelector('span').textContent = 'Sending...';
+      successMessage.hidden = true;
+      errorMessage.hidden = true;
+      fetch(feedbackForm.action, {
+        method: 'POST',
+        body: new FormData(feedbackForm),
+        headers: { Accept: 'application/json' }
+      }).then((response) => {
+        if (!response.ok) throw new Error('Email request failed');
+        feedbackInput.value = '';
+        successMessage.hidden = false;
+      }).catch(() => {
+        errorMessage.hidden = false;
+      }).finally(() => {
+        submitButton.disabled = false;
+        submitButton.querySelector('span').textContent = 'Send feedback';
+      });
+    });
+  </script>
+</body>
+</html>
